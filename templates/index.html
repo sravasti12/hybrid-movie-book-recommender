@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hybrid Movie + Book Recommender</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+
+    body {
+      font-family: 'Comic Neue', cursive, sans-serif;
+      margin: 30px;
+      background-color: #000;  /* black background */
+      color: #eee;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #131212;
+      padding: 20px 40px 40px 40px;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+    }
+    h1 {
+      text-align: center;
+      font-weight: 700;
+      color: #f0c040;
+      margin-bottom: 40px;
+    }
+    form {
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    input[type="text"] {
+      background-color: #222;
+      border: none;
+      border-radius: 25px;
+      padding: 12px 30px;
+      font-size: 18px;
+      color: #eee;
+      width: 300px;
+      box-shadow: 0 0 10px #f0c040;
+      font-family: 'Comic Neue', cursive, sans-serif;
+      transition: all 0.3s ease;
+      outline: none;
+      cursor: pointer;
+      text-align: center;
+    }
+    input[type="text"]::placeholder {
+      color: #aaa;
+      font-style: italic;
+    }
+    input[type="text"]:focus {
+      background-color: #333;
+      box-shadow: 0 0 15px #f0c040;
+    }
+    input[type="submit"] {
+      background-color: #f0c040;
+      border: none;
+      border-radius: 25px;
+      padding: 12px 40px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #000;
+      cursor: pointer;
+      font-family: 'Comic Neue', cursive, sans-serif;
+      box-shadow: 0 0 15px #f0c040;
+      transition: background-color 0.3s ease;
+      margin-left: 15px;
+    }
+    input[type="submit"]:hover {
+      background-color: #d1a530;
+      box-shadow: 0 0 20px #d1a530;
+    }
+    .movie-details {
+      display: flex;
+      margin-bottom: 40px;
+      color: #eee;
+    }
+    .movie-poster img {
+      max-width: 250px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px #f0c040;
+    }
+    .movie-info {
+      margin-left: 30px;
+      flex: 1;
+    }
+    .movie-info h2 {
+      margin-top: 0;
+      color: #f0c040;
+    }
+    .book-recommendations h2 {
+      margin-bottom: 15px;
+      color: #f0c040;
+    }
+    .book {
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #333;
+      color: #ddd;
+    }
+    .book-title {
+      font-weight: 700;
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Hybrid Movie + Book Recommender</h1>
+
+    <form method="POST" action="/">
+      <input type="text" name="movie_name" placeholder="Enter a movie name..." required />
+      <input type="submit" value="Search" />
+    </form>
+
+    {% if movie %}
+      <div class="movie-details">
+        <div class="movie-poster">
+          {% if poster_url %}
+            <img src="{{ poster_url }}" alt="Poster of {{ movie.title }}" />
+          {% else %}
+            <p>No poster available.</p>
+          {% endif %}
+        </div>
+        <div class="movie-info">
+          <h2>{{ movie.title }}</h2>
+          <p><strong>Genres:</strong> {{ movie.genres | join(', ') }}</p>
+          <p>{{ movie.overview }}</p>
+        </div>
+      </div>
+    {% else %}
+      <p style="text-align:center; font-style: italic; margin-top: 50px; color: #ccc;">
+        Welcome! Enter a movie name above to get book recommendations.
+      </p>
+    {% endif %}
+
+    {% if recommendations %}
+      <div class="book-recommendations">
+        <h2>Recommended Books:</h2>
+        {% for book in recommendations %}
+          <div class="book">
+            <p class="book-title">{{ book.title }}</p>
+            <p>{{ book.description }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</body>
+</html>
